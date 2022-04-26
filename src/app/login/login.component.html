@@ -1,0 +1,30 @@
+<div class="container" id="container">
+  <div class="form-container log-in-container">
+    <form action="#">
+      <h1>Se Connecter</h1>
+      <br />
+      <input
+        type="text"
+        [(ngModel)]="username"
+        placeholder="Username"
+        [ngModelOptions]="{ standalone: true }"
+      />
+      <input
+        type="password"
+        [(ngModel)]="password"
+        placeholder="Password"
+        [ngModelOptions]="{ standalone: true }"
+      />
+      <br />
+      <button type="button" (click)="loginCheck()">Se Connecter</button>
+    </form>
+  </div>
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-right">
+        <h1>Maintenance Chez Moez</h1>
+        <p>Bienvenue !</p>
+      </div>
+    </div>
+  </div>
+</div>

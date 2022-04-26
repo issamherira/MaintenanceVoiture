@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" style="color: white">Maintenance Chez Moez</a>
+</nav>
+
+<div class="container">
+  <a routerLink="/list" class="btn btn-primary">Retour</a>
+  <br />
+  <br />
+  <h1>Détails</h1>
+  <br />
+  <div>
+    <strong>Date : </strong>
+    <span>{{ voiture.date }}</span>
+  </div>
+  <br />
+  <div>
+    <strong>Client : </strong>
+    <span>{{ voiture.client }}</span>
+  </div>
+  <br />
+  <div>
+    <strong>Marque : </strong>
+    <span>{{ voiture.marque }}</span>
+  </div>
+  <br />
+  <div>
+    <strong>Kilométrage : </strong>
+    <span>{{ voiture.kilometrage }}</span>
+  </div>
+  <br />
+  <div>
+    <strong>Matricule : </strong>
+    <span>{{ voiture.matricule }}</span>
+  </div>
+  <br />
+  <div>
+    <strong>Commentaires : </strong>
+    <span>{{ voiture.commentaire }}</span>
+  </div>
+  <br />
+  <div>
+    <strong>Téléphone : </strong>
+    <span>{{ voiture.numTelephone }}</span>
+  </div>
+  <br />
+  <div>
+    <strong>Reste à Payer : </strong>
+    <span>{{ voiture.total }}</span>
+  </div>
+</div>

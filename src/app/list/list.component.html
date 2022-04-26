@@ -1,0 +1,368 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" style="color: white">Maintenance Chez Moez</a>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" (click)="onOpenModal(null, 'add')"
+          >Ajouter Voiture <span class="sr-only">(current)</span></a
+        >
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input
+        type="search"
+        (ngModelChange)="searchVoitures(key.value)"
+        #key="ngModel"
+        ngModel
+        name="key"
+        id="searchName"
+        class="form-control mr-sm-2"
+        placeholder="Chercher voitures..."
+        required
+      />
+    </form>
+  </div>
+</nav>
+
+<div class="container" id="main-container">
+  <table class="table table-bordered">
+    <tr>
+      <th>Date</th>
+      <th>Client</th>
+      <th>Marque</th>
+      <th>Kilométrage</th>
+      <th>Matricule</th>
+      <th>total</th>
+      <th width="220px">Action</th>
+    </tr>
+    <tr *ngFor="let voiture of voitures">
+      <td>{{ voiture.date }}</td>
+      <td>{{ idclient}}</td>
+      <td>{{ voiture.marque }}</td>
+      <td>{{ voiture.kilometrage }}</td>
+      <td>{{ voiture.matricule }}</td>
+      <td>{{ voiture.total }}</td>
+      <td>
+        <a [routerLink]="['/list/view/', voiture.id]" class="btn btn-info">
+          Voir
+        </a>
+        <button (click)="onOpenModal(voiture, 'edit')" class="btn btn-primary">
+          Modifier
+        </button>
+        <button
+          type="button"
+          (click)="onOpenModal(voiture, 'delete')"
+          class="btn btn-danger"
+        >
+          X
+        </button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Add Voiture Modal -->
+<div
+  class="modal fade"
+  id="addVoitureModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="addVoitureModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addVoitureModalLabel">Ajouter Voiture</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #addForm="ngForm" (ngSubmit)="onAddVoiture(addForm)">
+         
+          <div class="form-group">
+            <label for="marque">Marque</label>
+            <input
+              type="text"
+              ngModel
+              name="marque"
+              class="form-control"
+              id="marque"
+              placeholder="Marque"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="kilometrage">Kilométrage</label>
+            <input
+              type="text"
+              ngModel
+              name="kilometrage"
+              class="form-control"
+              id="kilometrage"
+              placeholder="Kilométrage"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="matricule">Matricule</label>
+            <input
+              type="text"
+              ngModel
+              name="matricule"
+              class="form-control"
+              id="matricule"
+              placeholder="Matricule"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="commentaire">Commentaires</label>
+            <input
+              type="text"
+              ngModel
+              name="commentaire"
+              class="form-control"
+              id="commentaire"
+              placeholder="Commentaires"
+              required
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="total">Reste à Payer</label>
+            <input
+              type="number"
+              ngModel
+              name="total"
+              class="form-control"
+              id="total"
+              placeholder="Reste à Payer"
+              required
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              id="add-voiture-form"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              [disabled]="addForm.invalid"
+              type="submit"
+              class="btn btn-primary"
+            >
+              Ajouter
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div
+  class="modal fade"
+  id="updateVoitureModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="voitureEditModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateVoitureModalLabel">
+          Modifier Voiture {{ editVoiture?.marque }}
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editForm="ngForm">
+          <div class="form-group">
+            <label for="client">Client</label>
+            <input
+              type="text"
+              ngModel="{{ editVoiture?.client }}"
+              name="client"
+              class="form-control"
+              id="client"
+              aria-describedby="emailHelp"
+              placeholder="Client"
+            />
+          </div>
+          <input
+            type="hidden"
+            ngModel="{{ editVoiture?.id }}"
+            name="id"
+            class="form-control"
+            id="id"
+          />
+          <input
+            type="hidden"
+            ngModel="{{ editVoiture?.date }}"
+            name="date"
+            class="form-control"
+            id="date"
+          />
+          <div class="form-group">
+            <label for="marque">Marque</label>
+            <input
+              type="text"
+              ngModel="{{ editVoiture?.marque }}"
+              name="marque"
+              class="form-control"
+              id="marque"
+              placeholder="Marque"
+            />
+          </div>
+          <div class="form-group">
+            <label for="kilometrage">Kilométrage</label>
+            <input
+              type="text"
+              ngModel="{{ editVoiture?.kilometrage }}"
+              name="kilometrage"
+              class="form-control"
+              id="kilometrage"
+              placeholder="Kilométrage"
+            />
+          </div>
+          <div class="form-group">
+            <label for="matricule">Matricule</label>
+            <input
+              type="text"
+              ngModel="{{ editVoiture?.matricule }}"
+              name="matricule"
+              class="form-control"
+              id="matricule"
+              name="matricule"
+              placeholder="Matricule"
+            />
+          </div>
+          <div class="form-group">
+            <label for="commentaire">Commentaires</label>
+            <input
+              type="text"
+              ngModel="{{ editVoiture?.commentaire }}"
+              name="commentaire"
+              class="form-control"
+              id="commentaire"
+              name="commentaire"
+              placeholder="Commentaires"
+            />
+          </div>
+          <div class="form-group">
+            <label for="numTelepone">Téléphone</label>
+            <input
+              type="text"
+              ngModel="{{ editVoiture?.numTelephone }}"
+              name="numTelephone"
+              class="form-control"
+              id="numTelephone"
+              name="numTelephone"
+              placeholder="Téléphone"
+            />
+          </div>
+          <div class="form-group">
+            <label for="total">Reste à payer</label>
+            <input
+              type="number"
+              ngModel="{{ editVoiture?.total }}"
+              name="total"
+              class="form-control"
+              id="total"
+              name="total"
+              placeholder="Reste à payer"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              id=""
+              data-dismiss="modal"
+              class="btn btn-secondary"
+            >
+              Annuler
+            </button>
+            <button
+              (click)="onUpdateVoiture(editForm.value)"
+              data-dismiss="modal"
+              class="btn btn-primary"
+            >
+              Confirmer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div
+  class="modal fade"
+  id="deleteVoitureModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="deleteModelLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModelLabel">Supprimer Voiture</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Vous êtes en train de supprimer la voiture
+          {{ deleteVoiture?.marque }}?
+        </p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Non
+          </button>
+          <button
+            (click)="onDeleteVoiture(deleteVoiture?.id)"
+            class="btn btn-danger"
+            data-dismiss="modal"
+          >
+            Oui
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Notification for no cars -->
+<div *ngIf="voitures?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+  <div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">Aucune voiture !</h4>
+    <p>No Cars were found.</p>
+  </div>
+</div>
